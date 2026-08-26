@@ -1,18 +1,83 @@
-# React + Vite
+# 🎨 Helpdesk & Support Ticket System - Frontend Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+This is the responsive frontend user interface for the Helpdesk and Support Ticket Management System, built using **React (Vite) and React-Bootstrap**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🔗 Live Application Link
+- **Frontend UI (Vercel):** https://helpdesk-frontend-weld.vercel.app/
 
-## React Compiler
+---
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## 🛠️ Tech Stack
+- **Framework:** React (Vite)
+- **Routing:** React Router
+- **Styling:** React-Bootstrap, React-Icons
+- **API Client:** Axios (for connecting to the Backend API)
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the Oxlint configuration
+## ⚙️ Local Setup & Installation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### Prerequisites
+- Node.js installed
+- Running Backend API (Local or Live)
+
+### 1. Clone & Navigate
+```bash
+git clone <your-frontend-repository-url>
+cd client
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Environment Variables (.env Configuration)
+Create a `.env` file inside the root of your `client/` directory and map it to your backend URL:
+```env
+VITE_BACKEND_URL=http://localhost:5000
+```
+
+### 4. Start Development Server
+```bash
+npm run dev
+```
+
+---
+
+## 📌 UI Features & Dashboards
+
+- **Dynamic Dashboards:** Real-time aggregated stats (total, open, resolved, overdue tickets, and priority breakdown).
+- **Responsive Layout:** Mobile-friendly design implementing ticket filtering and creation.
+- **Role-Based Views:** 
+  - **Requester View:** Create tickets, add comments, reopen closed tickets.
+  - **Agent View:** View assigned tickets, update priorities, leave internal/external staff notes.
+  - **Admin Panel:** Manage user roles, assign tickets to agents, create/delete categories.
+
+---
+
+## 🔑 Test Credentials
+For testing different dashboard views, use the following roles:
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | haseeb9420@gmail.com | haseeb9420 |
+| Requester | zohaibali01@gmail.com | zohaibali01 |
+| Agent | harisali123@gmail.com | harisali123 |
+
+---
+
+## 📁 Project Structure
+```text
+client/
+├── src/
+│   ├── components/      # Reusable UI Elements (Navbar, Sidebar, Ticket Card)
+│   ├── pages/           # Dashboard, Login, Ticket Details, Admin Panel
+│   ├── App.jsx          # Routes definition
+│   └── main.jsx         # App bootstrapping
+```
+
+---
+Built by Rana Haseeb Hussain
