@@ -67,12 +67,13 @@ function TicketDetail() {
                             )}
                         </Card.Body>
                     </Card>
-
-                    <Card className='shadow-sm mb-3'>
-                        <Card.Body>
-                            <TicketActions ticket={ticket} user={user} ticketId={id} onUpdate={fetchTicket} />
-                        </Card.Body>
-                    </Card>
+                    {user.role === 'agent' || user.role === 'admin' ? (
+                        <Card className='shadow-sm mb-3'>
+                            <Card.Body>
+                                <TicketActions ticket={ticket} user={user} ticketId={id} onUpdate={fetchTicket} />
+                            </Card.Body>
+                        </Card>
+                    ) : null}
                     <Card className='shadow-sm mb-3'>
                         <Card.Body>
                             <StatusHistoryTimeline ticketId={id} />
