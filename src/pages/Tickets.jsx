@@ -1,9 +1,9 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Form, Badge, Spinner, Button, Row, Col } from 'react-bootstrap'
 import { motion } from 'framer-motion'
 import Layout from '../components/Layout'
+import api from '../api/axios'
 import { theme, getStatusStyle, getPriorityStyle } from '../theme'
 import { BsSearch, BsPlusLg } from 'react-icons/bs'
 
@@ -20,7 +20,7 @@ function Tickets() {
         try {
             setLoading(true)
             const token = localStorage.getItem('token')
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/tickets`, {
+            const res = await api.get(`/api/tickets`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setTickets(res.data.tickets)

@@ -1,10 +1,10 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Form, Button, Card, Spinner } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Layout from '../components/Layout'
 import { theme } from '../theme'
+import api from '../api/axios'
 
 function CreateTickets() {
     const navigate = useNavigate()
@@ -28,7 +28,7 @@ function CreateTickets() {
         try {
             setLoading(true)
             const token = localStorage.getItem('token')
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`, {
+            const res = await api.get(`/api/categories`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setCategories(res.data.categories)
@@ -45,7 +45,7 @@ function CreateTickets() {
         e.preventDefault()
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/tickets`, details, {
+            const res = await api.post(`/api/tickets`, details, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { BsEye, BsEyeSlash } from 'react-icons/bs'
-import axios from 'axios'
 import { Form, Button, Card, Spinner } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { theme } from '../theme'
 import { motion } from 'framer-motion'
+import api from '../api/axios'
 import Footer from '../components/Footer'
 
 function Login() {
@@ -29,14 +29,16 @@ function Login() {
         }
         try {
             setLoading(true)
-            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/login`, authData)
+            const res = await api.post(`/api/login`, authData)
             localStorage.setItem('token', res.data.token)
             localStorage.setItem('user', JSON.stringify(res.data.user))
             setAuthData({
                 email: "",
                 password: ""
             })
-            navigate('/dashboard')
+            const redirectPath = localStorage.getItem('redirectAfterLogin')
+            localStorage.removeItem('redirectAfterLogin')
+            navigate(redirectPath || '/dashboard')
         } catch (error) {
             setError(error.response?.data?.msg || "Something went wrong")
         } finally {

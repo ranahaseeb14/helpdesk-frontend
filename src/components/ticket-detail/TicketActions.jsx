@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { Button, Form, Badge } from 'react-bootstrap'
 import { motion, AnimatePresence } from 'framer-motion'
 import { theme, getPriorityStyle } from '../../theme'
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs'
+import api from '../../api/axios'
 
 const allowedTransitions = {
     'Open': ['Assigned'],
@@ -20,7 +20,7 @@ function TicketActions({ ticket, user, ticketId, onUpdate }) {
     async function fetchAgents() {
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/users/agents`, {
+            const res = await api.get(`/api/users/agents`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setAgents(res.data.agents)
@@ -31,7 +31,7 @@ function TicketActions({ ticket, user, ticketId, onUpdate }) {
     async function handleAssign(agentId) {
         try {
             const token = localStorage.getItem('token')
-            await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/${ticketId}/assign`, { agentId }, {
+            await api.patch(`/api/tickets/${ticketId}/assign`, { agentId }, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             onUpdate()
@@ -47,7 +47,7 @@ function TicketActions({ ticket, user, ticketId, onUpdate }) {
                 resolutionNote = prompt("Please Write Resolution Note:")
                 if (!resolutionNote) return
             }
-            await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/${ticketId}/status`, { status: newStatus, resolutionNote }, {
+            await api.patch(`/api/tickets/${ticketId}/status`, { status: newStatus, resolutionNote }, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             onUpdate()
@@ -58,7 +58,7 @@ function TicketActions({ ticket, user, ticketId, onUpdate }) {
     async function handlePriorityChange(newPriority) {
         try {
             const token = localStorage.getItem('token')
-            await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/${ticketId}/priority`, { priority: newPriority }, { headers: { Authorization: `Bearer ${token}` } })
+            await api.patch(`/api/tickets/${ticketId}/priority`, { priority: newPriority }, { headers: { Authorization: `Bearer ${token}` } })
             onUpdate()
         } catch (error) {
             console.log(error)
@@ -67,7 +67,7 @@ function TicketActions({ ticket, user, ticketId, onUpdate }) {
     async function handleReopen() {
         try {
             const token = localStorage.getItem('token')
-            await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/${ticketId}/reopen`, {}, {
+            await api.patch(`/api/tickets/${ticketId}/reopen`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             onUpdate()

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useState } from 'react'
 import { BsEye, BsEyeSlash } from 'react-icons/bs'
 import { Form, Button, Card, Spinner } from 'react-bootstrap'
@@ -6,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { theme } from '../theme'
 import { motion } from 'framer-motion'
 import Footer from '../components/Footer'
+import api from '../api/axios'
 
 function Register() {
     const navigate = useNavigate()
@@ -30,7 +30,7 @@ function Register() {
         }
         try {
             setLoading(true)
-            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/register`, authData)
+            const res = await api.post(`/api/register`, authData)
             setAuthData({
                 name: "",
                 email: "",

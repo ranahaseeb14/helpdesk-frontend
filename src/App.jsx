@@ -9,6 +9,7 @@ import CreateTickets from './pages/CreateTickets'
 import TicketDetail from './pages/TicketDetail'
 import ManageUsers from './pages/ManageUsers'
 import CategoryManagement from './pages/CategoryManagement'
+import SessionExpired from './pages/SessionExpired'
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path='/ticket/:id' element={<ProtectedRoute> <TicketDetail /> </ProtectedRoute>} />
                 <Route path='/manage-users' element={<ProtectedRoute> <ManageUsers /> </ProtectedRoute>} />
                 <Route path='/manage-categories' element={<ProtectedRoute> <CategoryManagement /> </ProtectedRoute>} />
+                <Route path='/session-expired' element={<SessionExpired />} />
             </Routes>
         </BrowserRouter>
     )

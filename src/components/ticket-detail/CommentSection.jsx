@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { Button, Form, Badge } from 'react-bootstrap'
 import { theme } from '../../theme'
+import api from '../../api/axios'
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -14,7 +14,7 @@ function CommentSection({ ticketId, user }) {
     async function fetchComments() {
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/${ticketId}/comments`, {
+            const res = await api.get(`/api/tickets/${ticketId}/comments`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setComments(res.data.comments)
@@ -27,7 +27,7 @@ function CommentSection({ ticketId, user }) {
         e.preventDefault()
         try {
             const token = localStorage.getItem('token')
-            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/${ticketId}/comments`, { message, isInternal }, {
+            await api.post(`/api/tickets/${ticketId}/comments`, { message, isInternal }, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setMessage("")

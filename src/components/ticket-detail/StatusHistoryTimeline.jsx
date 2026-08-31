@@ -1,6 +1,6 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { theme } from '../../theme'
+import api from '../../api/axios'
 import { BsArrowRight, BsChevronDown, BsChevronUp } from 'react-icons/bs'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -11,7 +11,7 @@ function StatusHistoryTimeline({ ticketId }) {
     async function fetchHistory() {
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/${ticketId}/status-history`, {
+            const res = await api.get(`/api/tickets/${ticketId}/status-history`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setHistory(res.data.history)

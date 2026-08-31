@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { Card, Row, Col, Spinner } from 'react-bootstrap'
-import axios from 'axios'
 import { motion } from 'framer-motion'
 import { theme } from '../theme'
+import api from '../api/axios'
 import { BsTicketPerforated, BsExclamationCircle, BsCheckCircle, BsClockHistory } from 'react-icons/bs'
 
 function Dashboard() {
@@ -14,7 +14,7 @@ function Dashboard() {
         try {
             setLoading(true)
             const token = localStorage.getItem('token')
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/dashboard`, {
+            const res = await api.get(`/api/tickets/dashboard`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

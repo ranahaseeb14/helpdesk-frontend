@@ -1,10 +1,10 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Form, Button, Table, Spinner, Card } from 'react-bootstrap'
 import Layout from '../components/Layout'
 import { AnimatePresence, motion } from 'framer-motion'
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs'
 import { theme } from '../theme'
+import api from '../api/axios'
 
 function CategoryManagement() {
     const [category, setCategory] = useState([])
@@ -16,7 +16,7 @@ function CategoryManagement() {
         try {
             setLoading(true)
             const token = localStorage.getItem('token')
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`, {
+            const res = await api.get(`/api/categories`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setCategory(res.data.categories)
@@ -30,7 +30,7 @@ function CategoryManagement() {
         e.preventDefault()
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/categories`, { name: categoryName }, {
+            const res = await api.post(`/api/categories`, { name: categoryName }, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setCategoryName("")
@@ -44,7 +44,7 @@ function CategoryManagement() {
         if (!isConfirmed) return
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/categories/${id}`, {
+            const res = await api.delete(`/api/categories/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             fetchCategory()

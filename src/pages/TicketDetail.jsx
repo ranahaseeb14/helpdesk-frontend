@@ -1,8 +1,8 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Card, Badge, Spinner } from 'react-bootstrap'
 import { motion } from 'framer-motion'
+import api from '../api/axios'
 import { theme, getStatusStyle, getPriorityStyle } from '../theme'
 import Layout from '../components/Layout'
 import CommentSection from '../components/ticket-detail/CommentSection'
@@ -21,7 +21,7 @@ function TicketDetail() {
         try {
             setLoading(true)
             const token = localStorage.getItem('token')
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/${id}`, {
+            const res = await api.get(`/api/tickets/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setTicket(res.data.ticket)

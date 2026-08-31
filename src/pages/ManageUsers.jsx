@@ -1,10 +1,10 @@
-import axios from 'axios'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { Form, Badge, Table, Spinner, Card } from 'react-bootstrap'
 import Layout from '../components/Layout'
 import { motion } from 'framer-motion'
 import { theme } from '../theme'
+import api from '../api/axios'
 
 function ManageUsers() {
     const [users, setUsers] = useState([])
@@ -13,7 +13,7 @@ function ManageUsers() {
         try {
             setLoading(true)
             const token = localStorage.getItem('token')
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/users`, {
+            const res = await api.get(`/api/users`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setUsers(res.data.users)
@@ -26,7 +26,7 @@ function ManageUsers() {
     async function handleRoleChange(userId, newRole) {
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/users/${userId}/role`, { role: newRole }, {
+            const res = await api.patch(`/api/users/${userId}/role`, { role: newRole }, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             fetchUsers()
