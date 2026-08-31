@@ -1,8 +1,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Card, Badge } from 'react-bootstrap'
-import Navbar from '../components/Navbar'
+import { Card, Badge, Spinner } from 'react-bootstrap'
+import { motion } from 'framer-motion'
+import { theme, getStatusStyle, getPriorityStyle } from '../theme'
+import Layout from '../components/Layout'
 import CommentSection from '../components/ticket-detail/CommentSection'
 import TicketActions from '../components/ticket-detail/TicketActions'
 import StatusHistoryTimeline from '../components/ticket-detail/StatusHistoryTimeline'
@@ -11,8 +13,13 @@ function TicketDetail() {
     const user = JSON.parse(localStorage.getItem('user'))
     const { id } = useParams()
     const [ticket, setTicket] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+    const statusStyle = getStatusStyle(ticket?.status)
+    const priorityStyle = getPriorityStyle(ticket?.priority)
     async function fetchTicket() {
         try {
+            setLoading(true)
             const token = localStorage.getItem('token')
             const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/tickets/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -20,40 +27,37 @@ function TicketDetail() {
             setTicket(res.data.ticket)
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
-    }
-    function getStatusColor(status) {
-        if (status === 'Open') return 'danger'
-        if (status === 'Assigned') return 'primary'
-        if (status === 'In Progress') return 'warning'
-        if (status === 'Resolved') return 'success'
-        if (status === 'Closed') return 'secondary'
-        return 'light'
-    }
-    function getPriorityColor(priority) {
-        if (priority === 'Low') return 'success'
-        if (priority === 'Medium') return 'warning'
-        if (priority === 'High') return 'danger'
-        return 'light'
     }
     useEffect(() => {
         fetchTicket()
     }, [id])
     return (
-        <div className='container'>
-            <Navbar />
-            {ticket && (
+        <Layout hideFooter>
+            {loading ? (
+                <div className="text-center mt-5">
+                    <Spinner animation="border" variant="primary" />
+                </div>
+            ) : (
                 <>
-                    <Card className='shadow-sm mb-3'>
+                    <Card className="border-0 shadow-sm mb-3" style={{ borderRadius: '14px' }}>
                         <Card.Body>
-                            <div className="d-flex justify-content-between align-items-start">
+                            <div className="d-flex justify-content-between align-items-start flex-wrap gap-2">
                                 <div>
                                     <h3>{ticket.ticketNo}</h3>
                                     <h5 className="text-muted">{ticket.title}</h5>
                                 </div>
-                                <div>
-                                    <Badge bg={getStatusColor(ticket.status)} className="me-2 fs-6">{ticket.status}</Badge>
-                                    <Badge bg={getPriorityColor(ticket.priority)} className="fs-6">{ticket.priority}</Badge>
+                                <div className="d-flex gap-2">
+                                    <motion.div key={ticket.status} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
+                                        <Badge bg={null} style={{ backgroundColor: statusStyle.bg, color: statusStyle.text, fontSize: '13px', padding: '6px 12px', borderRadius: '8px' }}>
+                                            {ticket.status}
+                                        </Badge>
+                                    </motion.div>
+                                    <Badge bg={null} style={{ backgroundColor: priorityStyle.bg, color: priorityStyle.text, fontSize: '13px', padding: '6px 12px', borderRadius: '8px' }}>
+                                        {ticket.priority}
+                                    </Badge>
                                 </div>
                             </div>
                             <hr />
@@ -67,26 +71,26 @@ function TicketDetail() {
                             )}
                         </Card.Body>
                     </Card>
+                    <Card className="border-0 shadow-sm mb-3" style={{ borderRadius: '14px' }}>
+                        <Card.Body>
+                            <CommentSection ticketId={id} user={user} />
+                        </Card.Body>
+                        <Card className="border-0 shadow-sm mb-3" style={{ borderRadius: '14px' }}>
+                            <Card.Body>
+                                <StatusHistoryTimeline ticketId={id} />
+                            </Card.Body>
+                        </Card>
+                    </Card>
                     {user.role === 'agent' || user.role === 'admin' ? (
-                        <Card className='shadow-sm mb-3'>
+                        <Card className="border-0 shadow-sm mb-3" style={{ borderRadius: '14px' }}>
                             <Card.Body>
                                 <TicketActions ticket={ticket} user={user} ticketId={id} onUpdate={fetchTicket} />
                             </Card.Body>
                         </Card>
                     ) : null}
-                    <Card className='shadow-sm mb-3'>
-                        <Card.Body>
-                            <StatusHistoryTimeline ticketId={id} />
-                        </Card.Body>
-                    </Card>
-                    <Card className='shadow-sm'>
-                        <Card.Body>
-                            <CommentSection ticketId={id} user={user} />
-                        </Card.Body>
-                    </Card>
                 </>
             )}
-        </div>
+        </Layout>
     )
 }
 export default TicketDetail

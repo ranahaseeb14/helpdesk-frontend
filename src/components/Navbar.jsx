@@ -1,9 +1,11 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Button } from 'react-bootstrap'
+import { Navbar as BsNavbar, Nav, Container, Button, Badge } from 'react-bootstrap'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { theme } from '../theme'
 
 function Navbar() {
     const navigate = useNavigate()
+    const location = useLocation()
     const user = JSON.parse(localStorage.getItem('user'))
 
     function logoutHandler() {
@@ -11,28 +13,78 @@ function Navbar() {
         localStorage.removeItem('user')
         navigate('/')
     }
+    function isActive(path) {
+        return location.pathname === path
+    }
+    const linkStyle = (path) => ({
+        color: isActive(path) ? theme.accentLight : '#cbd5e1',
+        fontWeight: isActive(path) ? 600 : 400,
+        borderBottom: isActive(path) ? `2px solid ${theme.accentLight}` : '2px solid transparent',
+        paddingBottom: '4px'
+    })
+    const initials = user.name?.charAt(0).toUpperCase()
 
     return (
-        <div className="d-flex justify-content-between align-items-center p-3 bg-dark">
-            <Link to="/dashboard" className="text-white text-decoration-none fs-4">Helpdesk System</Link>
+        <BsNavbar
+            expand="lg"
+            variant="dark"
+            fixed="top"
+            style={{
+                backgroundColor: 'rgba(30, 27, 75, 0.85)',
+                backdropFilter: 'blur(10px)',
+                borderBottom: `1px solid ${theme.border}30`,
+                zIndex: 1030
+            }}
+        >
+            <Container>
+                <BsNavbar.Brand as={Link} to="/dashboard" className="fw-bold">
+                    🎫 Helpdesk
+                </BsNavbar.Brand>
 
-            <div>
-                <Link to="/tickets" className="text-white mx-2">Tickets</Link>
+                <BsNavbar.Toggle aria-controls="main-navbar" />
 
-                {user.role === 'requester' && (
-                    <Link to="/create-tickets" className="text-white mx-2">Create Ticket</Link>
-                )}
+                <BsNavbar.Collapse id="main-navbar">
+                    <Nav className="ms-auto align-items-lg-center gap-lg-4">
+                        <Nav.Link as={Link} to="/tickets" style={linkStyle('/tickets')}>Tickets</Nav.Link>
 
-                {user.role === 'admin' && (
-                    <>
-                        <Link to="/manage-users" className="text-white mx-2">Manage Users</Link>
-                        <Link to="/manage-categories" className="text-white mx-2">Manage Categories</Link>
-                    </>
-                )}
+                        {user.role === 'requester' && (
+                            <Nav.Link as={Link} to="/create-tickets" style={linkStyle('/create-tickets')}>Create Ticket</Nav.Link>
+                        )}
 
-                <Button variant="danger" size="sm" onClick={logoutHandler}>Logout</Button>
-            </div>
-        </div>
+                        {user.role === 'admin' && (
+                            <>
+                                <Nav.Link as={Link} to="/manage-users" style={linkStyle('/manage-users')}>Manage Users</Nav.Link>
+                                <Nav.Link as={Link} to="/manage-categories" style={linkStyle('/manage-categories')}>Categories</Nav.Link>
+                            </>
+                        )}
+
+                        <div className="d-flex align-items-center gap-2 ms-lg-3 mt-2 mt-lg-0">
+                            <div
+                                style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    borderRadius: '50%',
+                                    backgroundColor: theme.accent,
+                                    color: 'white',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '14px',
+                                    fontWeight: 600
+                                }}
+                            >
+                                {initials}
+                            </div>
+                            <div className="d-none d-lg-block">
+                                <div style={{ fontSize: '13px', color: 'white' }}>{user.name}</div>
+                                <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'capitalize' }}>{user.role}</div>
+                            </div>
+                            <Button variant="outline-light" size="sm" onClick={logoutHandler}>Logout</Button>
+                        </div>
+                    </Nav>
+                </BsNavbar.Collapse>
+            </Container>
+        </BsNavbar>
     )
 }
 
