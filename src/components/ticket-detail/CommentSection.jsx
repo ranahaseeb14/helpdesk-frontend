@@ -37,7 +37,7 @@ function CommentSection({ ticketId, user }) {
             console.log(error)
         }
     }
-
+    console.log(comments)
     useEffect(() => {
         fetchComments()
     }, [ticketId])
@@ -86,32 +86,39 @@ function CommentSection({ ticketId, user }) {
                         transition={{ duration: 0.25 }}
                         style={{ overflow: 'hidden' }}
                     >
-                        <div className="d-flex flex-column gap-2 mb-4">
-                            {comments.map((comment) => (
-                                <div
-                                    key={comment._id}
-                                    className="p-3"
-                                    style={{
-                                        backgroundColor: comment.isInternal ? '#fef9e7' : theme.bgLight,
-                                        borderRadius: '10px',
-                                        fontSize: '14px'
-                                    }}
-                                >
-                                    <div className="d-flex justify-content-between align-items-start">
-                                        <span style={{ color: theme.primary }}>{comment.message}</span>
-                                        {comment.isInternal && (
-                                            <Badge bg={null} style={{ backgroundColor: '#fef3c7', color: '#92400e', fontSize: '11px', flexShrink: 0 }} className="ms-2">
-                                                Internal
-                                            </Badge>
-                                        )}
+                        <div className="d-flex flex-column gap-3 mt-3">
+                            {comments.length === 0 ? (
+                                <p className="text-muted" style={{ fontSize: '14px' }}>No comments yet.</p>
+                            ) : (
+                                comments.map((comment) => (
+                                    <div
+                                        key={comment._id}
+                                        className="p-3"
+                                        style={{
+                                            backgroundColor: comment.isInternal ? '#fef9e7' : theme.bgLight,
+                                            borderRadius: '10px',
+                                            fontSize: '14px'
+                                        }}
+                                    >
+                                        <div className="d-flex justify-content-between align-items-start">
+                                            <span style={{ color: theme.textMuted, fontSize: '12px' }}>
+                                                {comment.author?.name}
+                                            </span>
+                                            <span style={{ color: theme.primary }}>{comment.message}</span>
+                                            {comment.isInternal && (
+                                                <Badge bg={null} style={{ backgroundColor: '#fef3c7', color: '#92400e', fontSize: '11px', flexShrink: 0 }} className="ms-2">
+                                                    Internal
+                                                </Badge>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            )}
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     )
 }
 

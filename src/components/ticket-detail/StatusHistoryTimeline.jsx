@@ -19,7 +19,7 @@ function StatusHistoryTimeline({ ticketId }) {
             console.log(error)
         }
     }
-
+    console.log(history)
     useEffect(() => {
         fetchHistory()
     }, [ticketId])
