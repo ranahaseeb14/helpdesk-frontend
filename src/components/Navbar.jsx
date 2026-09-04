@@ -2,15 +2,15 @@ import React from 'react'
 import { Navbar as BsNavbar, Nav, Container, Button, Badge } from 'react-bootstrap'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { theme } from '../theme'
+import { useAuth } from '../context/AuthContext'
 
 function Navbar() {
+    const { user, logout } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
-    const user = JSON.parse(localStorage.getItem('user'))
 
     function logoutHandler() {
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
+        logout()
         navigate('/')
     }
     function isActive(path) {

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Card, Badge, Spinner } from 'react-bootstrap'
 import { motion } from 'framer-motion'
 import api from '../api/axios'
+import { useAuth } from '../context/AuthContext'
 import { theme, getStatusStyle, getPriorityStyle } from '../theme'
 import Layout from '../components/Layout'
 import CommentSection from '../components/ticket-detail/CommentSection'
@@ -10,7 +11,7 @@ import TicketActions from '../components/ticket-detail/TicketActions'
 import StatusHistoryTimeline from '../components/ticket-detail/StatusHistoryTimeline'
 
 function TicketDetail() {
-    const user = JSON.parse(localStorage.getItem('user'))
+    const { user } = useAuth()
     const { id } = useParams()
     const [ticket, setTicket] = useState(null)
     const [loading, setLoading] = useState(true)

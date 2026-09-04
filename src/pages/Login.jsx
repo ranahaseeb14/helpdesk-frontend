@@ -5,9 +5,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { theme } from '../theme'
 import { motion } from 'framer-motion'
 import api from '../api/axios'
+import { useAuth } from '../context/AuthContext'
 import Footer from '../components/Footer'
 
 function Login() {
+    const { login } = useAuth()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
@@ -30,8 +32,7 @@ function Login() {
         try {
             setLoading(true)
             const res = await api.post(`/api/login`, authData)
-            localStorage.setItem('token', res.data.token)
-            localStorage.setItem('user', JSON.stringify(res.data.user))
+            login(res.data.user, res.data.token)
             setAuthData({
                 email: "",
                 password: ""

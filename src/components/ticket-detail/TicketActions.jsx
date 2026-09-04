@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { theme, getPriorityStyle } from '../../theme'
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs'
 import api from '../../api/axios'
+import { useAuth } from '../../context/AuthContext'
 
 const allowedTransitions = {
     'Open': ['Assigned'],
@@ -12,7 +13,8 @@ const allowedTransitions = {
     'Resolved': ['Closed']
 }
 
-function TicketActions({ ticket, user, ticketId, onUpdate }) {
+function TicketActions({ ticket, ticketId, onUpdate }) {
+    const { user } = useAuth()
     const [agents, setAgents] = useState([])
     const [expanded, setExpanded] = useState(false)
     const priorityStyle = getPriorityStyle(ticket?.priority)

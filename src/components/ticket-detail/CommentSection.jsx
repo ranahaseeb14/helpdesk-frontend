@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Button, Form, Badge } from 'react-bootstrap'
 import { theme } from '../../theme'
 import api from '../../api/axios'
+import { useAuth } from '../../context/AuthContext'
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs'
 import { motion, AnimatePresence } from 'framer-motion'
 
-function CommentSection({ ticketId, user }) {
+function CommentSection({ ticketId }) {
+    const { user } = useAuth()
     const [comments, setComments] = useState([])
     const [message, setMessage] = useState("")
     const [isInternal, setIsInternal] = useState(false)
